@@ -1,0 +1,7 @@
+https://medium.com/@sosahlawe/build-a-real-time-flight-tracker-with-nextjs-tailwindcss-and-react-map-gl-a-step-by-step-d480d053052c
+
+1. create next.js project
+2. sign up for mapbox - figure out access token for secret scope later
+3. create map component - https://console.mapbox.com/
+4. https://visgl.github.io/react-map-gl/docs#
+5. https://openskynetwork.github.io/opensky-api/rest.html
