@@ -69,7 +69,7 @@ export default function Home() {
 
 
   return (
-    <div style={{ width: '100vw', height: '80vh' }}>
+    <div style={{ width: '100vw', height: '100vh' }}>
       <Map
         initialViewState={{
           latitude: coords.latitude,
