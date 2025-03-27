@@ -79,8 +79,7 @@ export default function Home() {
         style={{ width: '100%', height: '100%' }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxAccessToken={MAPBOX_TOKEN}
-        interactive={false}//limit api calls
-      >
+        maxBounds={[[coords.longitude - 0.2, coords.latitude - 0.06], [coords.longitude + 0.2, coords.latitude + 0.06]]}      >
        {/* User's current location */}
        <Marker latitude={coords.latitude} longitude={coords.longitude}>
        <FaMapMarkerAlt className="text-yellow-300 text-[24px] drop-shadow-[0_0_4px_black]" />
