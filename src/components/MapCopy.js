@@ -19,7 +19,6 @@ export default function Home() {
 
   // State variables
   const [flights, setFlights] = React.useState([]);
-  const [icao, setIcao] = React.useState([null]);
   const [selectedFlight, setSelectedFlight] = React.useState(null);
   const [clicked, setClicked] = React.useState(false);
   const [closing, setClosing] = React.useState(false);
@@ -28,7 +27,7 @@ export default function Home() {
 
 
   //gets data from aviationstack
-const fetchAviationStack = async () => {
+const fetchDataA = async () => {
   if (!AVIATIONSTACK_KEY) {
     console.error("Missing AviationStack API key");
     return;
@@ -39,8 +38,24 @@ const fetchAviationStack = async () => {
     return;
   }
 
-   
-  const url = `http://api.aviationstack.com/v1/flights?access_key=${AVIATIONSTACK_KEY}&flight_icao=`;
+  const RADIUS_KM = 1000; 
+
+  //function to calculate distance using Haversine formula
+  const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Earth radius in km
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  const url = `http://api.aviationstack.com/v1/flights?access_key=${AVIATIONSTACK_KEY}&flight_status=active&limit=100`;
 
   try {
     const response = await fetch(url);
@@ -60,13 +75,15 @@ const fetchAviationStack = async () => {
       return distance <= RADIUS_KM;
     });
 
+    setFlights(nearbyFlights);
   } catch (error) {
     console.error("Error fetching AviationStack data:", error.message);
   }
 };
 
 
-//ger icao24 from opensky, then use aerodataxbox to get the iata or icao, then find the country
+  //gets data from opensky
+  /*
   const fetchData = async () => {
     if (!coords) return;
 
@@ -82,22 +99,20 @@ const fetchAviationStack = async () => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setIcao(data.callsign || []);
       setFlights(data.states || []);
-      console.log("the callsigns: ", data.callsign)
       console.log("Fetched flight data successfully", data.states);
     } catch (error) {
       console.error("Error fetching flight data:", error.message);
     }
   };
-
+*/
 
 
 
   
   React.useEffect(() => {
     if (coords) {
-      fetchData();
+      fetchDataA();
     }
   }, [coords]);
 
@@ -185,8 +200,10 @@ const fetchAviationStack = async () => {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-lg font-semibold">Flight Info</h2>
+              <p><strong>Callsign:</strong> {selectedFlight[1] || 'N/A'}</p>
               <p><strong>Origin Country:</strong> {selectedFlight[2] || 'N/A'}</p>
-              <p><strong>ICAO24:</strong> {selectedFlight[0] || 'N/A'}</p>
+              <p><strong>Altitude:</strong> {selectedFlight[13] ? `${Math.round(selectedFlight[13])} m` : 'N/A'}</p>
+              <p><strong>Velocity:</strong> {selectedFlight[9] ? `${Math.round(selectedFlight[9])} m/s` : 'N/A'}</p>
               <p><strong>Heading:</strong> {selectedFlight[10] ? `${Math.round(selectedFlight[10])}°` : 'N/A'}</p>
             </div>
           </div>

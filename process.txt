@@ -5,3 +5,5 @@ https://medium.com/@sosahlawe/build-a-real-time-flight-tracker-with-nextjs-tailw
 3. create map component - https://console.mapbox.com/
 4. https://visgl.github.io/react-map-gl/docs#
 5. https://openskynetwork.github.io/opensky-api/rest.html
+6. https://doc.aerodatabox.com/index.html
+7. https://rapidapi.com/console/10437214/analytics/my-apiss
